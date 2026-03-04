@@ -1,0 +1,77 @@
+name: Daily WARN Act Scrape
+
+on:
+  schedule:
+    - cron: '0 6 * * *'   # Every day at 6am UTC
+  workflow_dispatch:        # Manual trigger from GitHub UI
+    inputs:
+      states:
+        description: 'Space-separated state codes (e.g. CA NY TX) or leave blank for all priority states'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  scrape-warn:
+    name: Scrape WARN Act Data
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install warn-scraper pandas feedparser requests beautifulsoup4
+
+      - name: Run WARN Act pipeline
+        run: |
+          if [ -n "${{ github.event.inputs.states }}" ]; then
+            python scripts/pipeline.py --states ${{ github.event.inputs.states }}
+          else
+            python scripts/pipeline.py
+          fi
+
+      - name: Run global news scraper
+        run: python scripts/global_scraper.py
+        continue-on-error: true   # Don't fail the whole job if RSS feeds are down
+
+      - name: Show summary
+        run: |
+          echo "=== layoffs_usa.csv ==="
+          wc -l data/layoffs_usa.csv || echo "File not yet created"
+          echo ""
+          echo "=== Last 10 entries ==="
+          tail -10 data/layoffs_usa.csv || true
+
+      - name: Commit updated data
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "data: daily WARN scrape ${{ github.run_id }} [skip ci]"
+          file_pattern: |
+            data/layoffs_usa.csv
+            data/stats.json
+            data/pipeline.log
+            dashboard/data.json
+          commit_user_name: "layoff-tracker-bot"
+          commit_user_email: "bot@github-actions"
+
+      - name: Open issue if pending global reviews exist
+        if: hashFiles('data/pending_global.csv') != ''
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: "🌍 Global scrape — ${{ github.run_number }} candidates need review"
+          content-filepath: data/pending_global.csv
+          labels: "needs-review, global, automated"
+        continue-on-error: true

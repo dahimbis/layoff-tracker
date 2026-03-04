@@ -1,0 +1,12 @@
+# Core pipeline
+warn-scraper>=1.2.80    # Stanford Big Local News — scrapes all 50 US states
+pandas>=2.0.0
+
+# Global news scraper
+feedparser>=6.0.10
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+
+# Optional: FastAPI backend
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
