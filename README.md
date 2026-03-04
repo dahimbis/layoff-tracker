@@ -9,9 +9,7 @@
 
 ---
 
-## 🔴 Live Dashboard
-
-**→ [dahimbis.github.io/layoff-tracker](https://dahimbis.github.io/layoff-tracker)**
+## 🔴 Live Dashboard **→ [dahimbis.github.io/layoff-tracker](https://dahimbis.github.io/layoff-tracker)**
 
 ---
 
@@ -126,10 +124,10 @@ cd dashboard && python -m http.server 8080
 ```
 
 The dashboard shows:
-- **Summary cards** — total laid off, record count, states, companies
-- **Bar chart** — layoffs by state (top 10)
-- **Doughnut chart** — layoff type breakdown
-- **Timeline** — monthly trend line
+- **Summary cards** - total laid off, record count, states, companies
+- **Bar chart** - layoffs by state (top 10)
+- **Doughnut chart** - layoff type breakdown
+- **Timeline** - monthly trend line
 - **Top companies** table with inline bar
 - **Recent filings** table (sorted by date)
 
@@ -210,7 +208,7 @@ If a state scraper breaks, open an issue at [`biglocalnews/warn-scraper`](https:
 - WARN Act data typically lags real-world layoffs by days to weeks
 - Some states are more timely than others (CA and NY are fastest)
 - Not all layoffs trigger WARN Act requirements (too small, exceptions apply)
-- International data quality varies — always check `source_url`
+- International data quality varies; always check `source_url`
 
 ---
 
