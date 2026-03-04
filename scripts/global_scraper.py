@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-global_scraper.py — Scrapes international layoff news for non-US companies.
+global_scraper.py - Scrapes international layoff news for non-US companies.
 Complements the WARN Act pipeline which only covers USA.
 
 Sources:
