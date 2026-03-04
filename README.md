@@ -17,15 +17,15 @@
 
 ## 📡 Where the Data Comes From
 
-### 🇺🇸 USA — WARN Act (Automated, Government-Verified)
+### 🇺🇸 USA - WARN Act (Automated, Government-Verified)
 
 The federal **Worker Adjustment and Retraining Notification (WARN) Act** legally requires
 companies with 100+ employees to file 60-day advance notice before mass layoffs.
 Every US state publishes this data publicly.
 
-This repo uses **[`warn-scraper`](https://github.com/biglocalnews/warn-scraper)** — 
+This repo uses **[`warn-scraper`](https://github.com/biglocalnews/warn-scraper)**, 
 a production Python package maintained by Stanford's [Big Local News](https://biglocalnews.org/) 
-program — to download WARN filings directly from state government websites.
+program to download WARN filings directly from state government websites.
 
 **States covered (scraped daily):**
 
@@ -41,7 +41,7 @@ program — to download WARN filings directly from state government websites.
 | OH | Ohio JFS |
 | + 12 more | See `scripts/pipeline.py` for full list |
 
-### 🌍 International — News Scraping (Pending Human Review)
+### 🌍 International - News Scraping (Pending Human Review)
 
 For non-US companies, we scrape:
 - **TechCrunch** layoffs tag RSS
@@ -157,10 +157,10 @@ In your GitHub repo:
 ## 🤝 Contributing
 
 ### Add international layoffs
-Review `data/pending_global.csv` — these are auto-scraped but need human verification of:
-- `country` — fill in the actual country
-- `company` — verify the extracted name is correct
-- `employees_laid_off` — verify the number
+Review `data/pending_global.csv` - these are auto-scraped but need human verification of:
+- `country` - fill in the actual country
+- `company` -  verify the extracted name is correct
+- `employees_laid_off` - verify the number
 
 Open a PR editing `data/pending_global.csv` → `data/layoffs_global.csv`.
 
