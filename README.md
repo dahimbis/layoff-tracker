@@ -3,15 +3,15 @@
 > Real-time layoff data pulled automatically from **US government WARN Act filings** + **international news sources**. 
 > No fake data. No manual entry. Everything is scraped from primary sources daily.
 
-![Daily Scrape](https://img.shields.io/github/actions/workflow/status/YOUR_USERNAME/layoff-tracker/daily_scrape.yml?label=Daily%20Scrape&style=flat-square)
-![Dashboard](https://img.shields.io/github/actions/workflow/status/YOUR_USERNAME/layoff-tracker/deploy_dashboard.yml?label=Dashboard&style=flat-square)
+![Daily Scrape](https://img.shields.io/github/actions/workflow/status/dahimbis/layoff-tracker/daily_scrape.yml?label=Daily%20Scrape&style=flat-square)
+![Dashboard](https://img.shields.io/github/actions/workflow/status/dahimbis/layoff-tracker/deploy_dashboard.yml?label=Dashboard&style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
 ---
 
 ## 🔴 Live Dashboard
 
-**→ [YOUR_USERNAME.github.io/layoff-tracker](https://YOUR_USERNAME.github.io/layoff-tracker)**
+**→ [dahimbis.github.io/layoff-tracker](https://dahimbis.github.io/layoff-tracker)**
 
 ---
 
@@ -85,7 +85,7 @@ layoff-tracker/
 
 ### 1. Fork & Clone
 ```bash
-git clone https://github.com/YOUR_USERNAME/layoff-tracker.git
+git clone https://github.com/dahimbis/layoff-tracker.git
 cd layoff-tracker
 ```
 
