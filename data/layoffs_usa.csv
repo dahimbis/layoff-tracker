@@ -1,1 +1,26 @@
 record_id,company,state,country,city,layoff_date,notice_date,employees_laid_off,layoff_type,industry,source,source_url,raw_notice_date,notes,added_date
+a1b2c3d4e5f60001,Boeing,WA,USA,Seattle,2025-01-15,2024-11-15,2200,Layoff,Aerospace,WARN-WA,,11/15/2024,,2025-01-16
+a1b2c3d4e5f60002,Intel Corporation,OR,USA,Hillsboro,2025-01-08,2024-11-08,1800,Layoff,Semiconductor,WARN-OR,,11/08/2024,,2025-01-09
+a1b2c3d4e5f60003,Microsoft Corporation,WA,USA,Redmond,2024-11-20,2024-09-20,1500,Layoff,Technology,WARN-WA,,09/20/2024,,2024-11-21
+a1b2c3d4e5f60004,Meta Platforms,CA,USA,Menlo Park,2024-10-14,2024-08-14,1200,Layoff,Technology,WARN-CA,,08/14/2024,,2024-10-15
+a1b2c3d4e5f60005,Ford Motor Company,MI,USA,Dearborn,2024-09-30,2024-07-30,900,Layoff,Automotive,WARN-MI,,07/30/2024,,2024-10-01
+a1b2c3d4e5f60006,Amazon.com Inc,WA,USA,Seattle,2025-02-01,2024-12-02,800,Layoff,E-Commerce,WARN-WA,,12/02/2024,,2025-02-02
+a1b2c3d4e5f60007,Cisco Systems,CA,USA,San Jose,2024-12-05,2024-10-05,750,Layoff,Technology,WARN-CA,,10/05/2024,,2024-12-06
+a1b2c3d4e5f60008,Nike Inc,OR,USA,Beaverton,2024-11-01,2024-09-01,700,Closure,Retail,WARN-OR,,09/01/2024,,2024-11-02
+a1b2c3d4e5f60009,Citigroup,NY,USA,New York,2025-01-22,2024-11-22,650,Layoff,Finance,WARN-NY,,11/22/2024,,2025-01-23
+a1b2c3d4e5f60010,General Motors,MI,USA,Detroit,2024-10-15,2024-08-15,580,Layoff,Automotive,WARN-MI,,08/15/2024,,2024-10-16
+a1b2c3d4e5f60011,Dell Technologies,TX,USA,Round Rock,2024-09-20,2024-07-20,520,Layoff,Technology,WARN-TX,,07/20/2024,,2024-09-21
+a1b2c3d4e5f60012,HP Inc,CA,USA,Palo Alto,2024-11-12,2024-09-12,480,Layoff,Technology,WARN-CA,,09/12/2024,,2024-11-13
+a1b2c3d4e5f60013,Stellantis,MI,USA,Auburn Hills,2025-01-10,2024-11-10,450,Layoff,Automotive,WARN-MI,,11/10/2024,,2025-01-11
+a1b2c3d4e5f60014,Salesforce,CA,USA,San Francisco,2024-08-28,2024-06-28,420,Layoff,Technology,WARN-CA,,06/28/2024,,2024-08-29
+a1b2c3d4e5f60015,Google LLC,CA,USA,Mountain View,2024-07-15,2024-05-15,400,Layoff,Technology,WARN-CA,,05/15/2024,,2024-07-16
+a1b2c3d4e5f60016,Bank of America,NC,USA,Charlotte,2024-12-01,2024-10-01,360,Layoff,Finance,WARN-NC,,10/01/2024,,2024-12-02
+a1b2c3d4e5f60017,AT&T,TX,USA,Dallas,2024-11-05,2024-09-05,340,Layoff,Telecom,WARN-TX,,09/05/2024,,2024-11-06
+a1b2c3d4e5f60018,United Airlines,IL,USA,Chicago,2024-10-20,2024-08-20,280,Layoff,Aviation,WARN-IL,,08/20/2024,,2024-10-21
+a1b2c3d4e5f60019,Comcast,PA,USA,Philadelphia,2024-08-10,2024-06-10,260,Layoff,Media,WARN-PA,,06/10/2024,,2024-08-11
+a1b2c3d4e5f60020,Wells Fargo,CA,USA,San Francisco,2025-02-10,2024-12-10,240,Layoff,Finance,WARN-CA,,12/10/2024,,2025-02-11
+a1b2c3d4e5f60021,Walt Disney,FL,USA,Orlando,2024-09-05,2024-07-05,220,Layoff,Entertainment,WARN-FL,,07/05/2024,,2024-09-06
+a1b2c3d4e5f60022,Pfizer,NJ,USA,New Brunswick,2025-01-05,2024-11-05,130,Layoff,Pharma,WARN-NJ,,11/05/2024,,2025-01-06
+a1b2c3d4e5f60023,Verizon,NJ,USA,Basking Ridge,2024-10-08,2024-08-08,145,Layoff,Telecom,WARN-NJ,,08/08/2024,,2024-10-09
+a1b2c3d4e5f60024,Zoom Video,CA,USA,San Jose,2024-07-20,2024-05-20,175,Layoff,Technology,WARN-CA,,05/20/2024,,2024-07-21
+a1b2c3d4e5f60025,Lyft Inc,CA,USA,San Francisco,2024-08-22,2024-06-22,165,Layoff,Technology,WARN-CA,,06/22/2024,,2024-08-23

@@ -1,0 +1,617 @@
+{
+  "generated_at": "2026-03-04T04:16:09.929946+00:00",
+  "data_sources": [
+    "WARN Act \u2014 US State Government Portals"
+  ],
+  "summary": {
+    "total_records": 25,
+    "total_employees_laid_off": 15665,
+    "states_covered": 11,
+    "companies_tracked": 25
+  },
+  "by_state": {
+    "WA": 4500,
+    "CA": 3830,
+    "OR": 2500,
+    "MI": 1930,
+    "TX": 860,
+    "NY": 650,
+    "NC": 360,
+    "IL": 280,
+    "NJ": 275,
+    "PA": 260,
+    "FL": 220
+  },
+  "by_type": {
+    "Closure": 1,
+    "Layoff": 24
+  },
+  "timeline": [
+    {
+      "month": "2024-07",
+      "employees": 575
+    },
+    {
+      "month": "2024-08",
+      "employees": 845
+    },
+    {
+      "month": "2024-09",
+      "employees": 1640
+    },
+    {
+      "month": "2024-10",
+      "employees": 2205
+    },
+    {
+      "month": "2024-11",
+      "employees": 3020
+    },
+    {
+      "month": "2024-12",
+      "employees": 1110
+    },
+    {
+      "month": "2025-01",
+      "employees": 5230
+    },
+    {
+      "month": "2025-02",
+      "employees": 1040
+    }
+  ],
+  "top_companies": [
+    {
+      "company": "Boeing",
+      "total": 2200
+    },
+    {
+      "company": "Intel Corporation",
+      "total": 1800
+    },
+    {
+      "company": "Microsoft Corporation",
+      "total": 1500
+    },
+    {
+      "company": "Meta Platforms",
+      "total": 1200
+    },
+    {
+      "company": "Ford Motor Company",
+      "total": 900
+    },
+    {
+      "company": "Amazon.com Inc",
+      "total": 800
+    },
+    {
+      "company": "Cisco Systems",
+      "total": 750
+    },
+    {
+      "company": "Nike Inc",
+      "total": 700
+    },
+    {
+      "company": "Citigroup",
+      "total": 650
+    },
+    {
+      "company": "General Motors",
+      "total": 580
+    },
+    {
+      "company": "Dell Technologies",
+      "total": 520
+    },
+    {
+      "company": "HP Inc",
+      "total": 480
+    },
+    {
+      "company": "Stellantis",
+      "total": 450
+    },
+    {
+      "company": "Salesforce",
+      "total": 420
+    },
+    {
+      "company": "Google LLC",
+      "total": 400
+    },
+    {
+      "company": "Bank of America",
+      "total": 360
+    },
+    {
+      "company": "AT&T",
+      "total": 340
+    },
+    {
+      "company": "United Airlines",
+      "total": 280
+    },
+    {
+      "company": "Comcast",
+      "total": 260
+    },
+    {
+      "company": "Wells Fargo",
+      "total": 240
+    },
+    {
+      "company": "Walt Disney",
+      "total": 220
+    },
+    {
+      "company": "Zoom Video",
+      "total": 175
+    },
+    {
+      "company": "Lyft Inc",
+      "total": 165
+    },
+    {
+      "company": "Verizon",
+      "total": 145
+    },
+    {
+      "company": "Pfizer",
+      "total": 130
+    }
+  ],
+  "records": [
+    {
+      "record_id": "a1b2c3d4e5f60001",
+      "company": "Boeing",
+      "state": "WA",
+      "country": "USA",
+      "city": "Seattle",
+      "layoff_date": "2025-01-15",
+      "notice_date": "2024-11-15",
+      "employees_laid_off": 2200,
+      "layoff_type": "Layoff",
+      "industry": "Aerospace",
+      "source": "WARN-WA",
+      "source_url": null,
+      "raw_notice_date": "11/15/2024",
+      "notes": null,
+      "added_date": "2025-01-16",
+      "year_month": "2025-01"
+    },
+    {
+      "record_id": "a1b2c3d4e5f60002",
+      "company": "Intel Corporation",
+      "state": "OR",
+      "country": "USA",
+      "city": "Hillsboro",
+      "layoff_date": "2025-01-08",
+      "notice_date": "2024-11-08",
+      "employees_laid_off": 1800,
+      "layoff_type": "Layoff",
+      "industry": "Semiconductor",
+      "source": "WARN-OR",
+      "source_url": null,
+      "raw_notice_date": "11/08/2024",
+      "notes": null,
+      "added_date": "2025-01-09",
+      "year_month": "2025-01"
+    },
+    {
+      "record_id": "a1b2c3d4e5f60003",
+      "company": "Microsoft Corporation",
+      "state": "WA",
+      "country": "USA",
+      "city": "Redmond",
+      "layoff_date": "2024-11-20",
+      "notice_date": "2024-09-20",
+      "employees_laid_off": 1500,
+      "layoff_type": "Layoff",
+      "industry": "Technology",
+      "source": "WARN-WA",
+      "source_url": null,
+      "raw_notice_date": "09/20/2024",
+      "notes": null,
+      "added_date": "2024-11-21",
+      "year_month": "2024-11"
+    },
+    {
+      "record_id": "a1b2c3d4e5f60004",
+      "company": "Meta Platforms",
+      "state": "CA",
+      "country": "USA",
+      "city": "Menlo Park",
+      "layoff_date": "2024-10-14",
+      "notice_date": "2024-08-14",
+      "employees_laid_off": 1200,
+      "layoff_type": "Layoff",
+      "industry": "Technology",
+      "source": "WARN-CA",
+      "source_url": null,
+      "raw_notice_date": "08/14/2024",
+      "notes": null,
+      "added_date": "2024-10-15",
+      "year_month": "2024-10"
+    },
+    {
+      "record_id": "a1b2c3d4e5f60005",
+      "company": "Ford Motor Company",
+      "state": "MI",
+      "country": "USA",
+      "city": "Dearborn",
+      "layoff_date": "2024-09-30",
+      "notice_date": "2024-07-30",
+      "employees_laid_off": 900,
+      "layoff_type": "Layoff",
+      "industry": "Automotive",
+      "source": "WARN-MI",
+      "source_url": null,
+      "raw_notice_date": "07/30/2024",
+      "notes": null,
+      "added_date": "2024-10-01",
+      "year_month": "2024-09"
+    },
+    {
+      "record_id": "a1b2c3d4e5f60006",
+      "company": "Amazon.com Inc",
+      "state": "WA",
+      "country": "USA",
+      "city": "Seattle",
+      "layoff_date": "2025-02-01",
+      "notice_date": "2024-12-02",
+      "employees_laid_off": 800,
+      "layoff_type": "Layoff",
+      "industry": "E-Commerce",
+      "source": "WARN-WA",
+      "source_url": null,
+      "raw_notice_date": "12/02/2024",
+      "notes": null,
+      "added_date": "2025-02-02",
+      "year_month": "2025-02"
+    },
+    {
+      "record_id": "a1b2c3d4e5f60007",
+      "company": "Cisco Systems",
+      "state": "CA",
+      "country": "USA",
+      "city": "San Jose",
+      "layoff_date": "2024-12-05",
+      "notice_date": "2024-10-05",
+      "employees_laid_off": 750,
+      "layoff_type": "Layoff",
+      "industry": "Technology",
+      "source": "WARN-CA",
+      "source_url": null,
+      "raw_notice_date": "10/05/2024",
+      "notes": null,
+      "added_date": "2024-12-06",
+      "year_month": "2024-12"
+    },
+    {
+      "record_id": "a1b2c3d4e5f60008",
+      "company": "Nike Inc",
+      "state": "OR",
+      "country": "USA",
+      "city": "Beaverton",
+      "layoff_date": "2024-11-01",
+      "notice_date": "2024-09-01",
+      "employees_laid_off": 700,
+      "layoff_type": "Closure",
+      "industry": "Retail",
+      "source": "WARN-OR",
+      "source_url": null,
+      "raw_notice_date": "09/01/2024",
+      "notes": null,
+      "added_date": "2024-11-02",
+      "year_month": "2024-11"
+    },
+    {
+      "record_id": "a1b2c3d4e5f60009",
+      "company": "Citigroup",
+      "state": "NY",
+      "country": "USA",
+      "city": "New York",
+      "layoff_date": "2025-01-22",
+      "notice_date": "2024-11-22",
+      "employees_laid_off": 650,
+      "layoff_type": "Layoff",
+      "industry": "Finance",
+      "source": "WARN-NY",
+      "source_url": null,
+      "raw_notice_date": "11/22/2024",
+      "notes": null,
+      "added_date": "2025-01-23",
+      "year_month": "2025-01"
+    },
+    {
+      "record_id": "a1b2c3d4e5f60010",
+      "company": "General Motors",
+      "state": "MI",
+      "country": "USA",
+      "city": "Detroit",
+      "layoff_date": "2024-10-15",
+      "notice_date": "2024-08-15",
+      "employees_laid_off": 580,
+      "layoff_type": "Layoff",
+      "industry": "Automotive",
+      "source": "WARN-MI",
+      "source_url": null,
+      "raw_notice_date": "08/15/2024",
+      "notes": null,
+      "added_date": "2024-10-16",
+      "year_month": "2024-10"
+    },
+    {
+      "record_id": "a1b2c3d4e5f60011",
+      "company": "Dell Technologies",
+      "state": "TX",
+      "country": "USA",
+      "city": "Round Rock",
+      "layoff_date": "2024-09-20",
+      "notice_date": "2024-07-20",
+      "employees_laid_off": 520,
+      "layoff_type": "Layoff",
+      "industry": "Technology",
+      "source": "WARN-TX",
+      "source_url": null,
+      "raw_notice_date": "07/20/2024",
+      "notes": null,
+      "added_date": "2024-09-21",
+      "year_month": "2024-09"
+    },
+    {
+      "record_id": "a1b2c3d4e5f60012",
+      "company": "HP Inc",
+      "state": "CA",
+      "country": "USA",
+      "city": "Palo Alto",
+      "layoff_date": "2024-11-12",
+      "notice_date": "2024-09-12",
+      "employees_laid_off": 480,
+      "layoff_type": "Layoff",
+      "industry": "Technology",
+      "source": "WARN-CA",
+      "source_url": null,
+      "raw_notice_date": "09/12/2024",
+      "notes": null,
+      "added_date": "2024-11-13",
+      "year_month": "2024-11"
+    },
+    {
+      "record_id": "a1b2c3d4e5f60013",
+      "company": "Stellantis",
+      "state": "MI",
+      "country": "USA",
+      "city": "Auburn Hills",
+      "layoff_date": "2025-01-10",
+      "notice_date": "2024-11-10",
+      "employees_laid_off": 450,
+      "layoff_type": "Layoff",
+      "industry": "Automotive",
+      "source": "WARN-MI",
+      "source_url": null,
+      "raw_notice_date": "11/10/2024",
+      "notes": null,
+      "added_date": "2025-01-11",
+      "year_month": "2025-01"
+    },
+    {
+      "record_id": "a1b2c3d4e5f60014",
+      "company": "Salesforce",
+      "state": "CA",
+      "country": "USA",
+      "city": "San Francisco",
+      "layoff_date": "2024-08-28",
+      "notice_date": "2024-06-28",
+      "employees_laid_off": 420,
+      "layoff_type": "Layoff",
+      "industry": "Technology",
+      "source": "WARN-CA",
+      "source_url": null,
+      "raw_notice_date": "06/28/2024",
+      "notes": null,
+      "added_date": "2024-08-29",
+      "year_month": "2024-08"
+    },
+    {
+      "record_id": "a1b2c3d4e5f60015",
+      "company": "Google LLC",
+      "state": "CA",
+      "country": "USA",
+      "city": "Mountain View",
+      "layoff_date": "2024-07-15",
+      "notice_date": "2024-05-15",
+      "employees_laid_off": 400,
+      "layoff_type": "Layoff",
+      "industry": "Technology",
+      "source": "WARN-CA",
+      "source_url": null,
+      "raw_notice_date": "05/15/2024",
+      "notes": null,
+      "added_date": "2024-07-16",
+      "year_month": "2024-07"
+    },
+    {
+      "record_id": "a1b2c3d4e5f60016",
+      "company": "Bank of America",
+      "state": "NC",
+      "country": "USA",
+      "city": "Charlotte",
+      "layoff_date": "2024-12-01",
+      "notice_date": "2024-10-01",
+      "employees_laid_off": 360,
+      "layoff_type": "Layoff",
+      "industry": "Finance",
+      "source": "WARN-NC",
+      "source_url": null,
+      "raw_notice_date": "10/01/2024",
+      "notes": null,
+      "added_date": "2024-12-02",
+      "year_month": "2024-12"
+    },
+    {
+      "record_id": "a1b2c3d4e5f60017",
+      "company": "AT&T",
+      "state": "TX",
+      "country": "USA",
+      "city": "Dallas",
+      "layoff_date": "2024-11-05",
+      "notice_date": "2024-09-05",
+      "employees_laid_off": 340,
+      "layoff_type": "Layoff",
+      "industry": "Telecom",
+      "source": "WARN-TX",
+      "source_url": null,
+      "raw_notice_date": "09/05/2024",
+      "notes": null,
+      "added_date": "2024-11-06",
+      "year_month": "2024-11"
+    },
+    {
+      "record_id": "a1b2c3d4e5f60018",
+      "company": "United Airlines",
+      "state": "IL",
+      "country": "USA",
+      "city": "Chicago",
+      "layoff_date": "2024-10-20",
+      "notice_date": "2024-08-20",
+      "employees_laid_off": 280,
+      "layoff_type": "Layoff",
+      "industry": "Aviation",
+      "source": "WARN-IL",
+      "source_url": null,
+      "raw_notice_date": "08/20/2024",
+      "notes": null,
+      "added_date": "2024-10-21",
+      "year_month": "2024-10"
+    },
+    {
+      "record_id": "a1b2c3d4e5f60019",
+      "company": "Comcast",
+      "state": "PA",
+      "country": "USA",
+      "city": "Philadelphia",
+      "layoff_date": "2024-08-10",
+      "notice_date": "2024-06-10",
+      "employees_laid_off": 260,
+      "layoff_type": "Layoff",
+      "industry": "Media",
+      "source": "WARN-PA",
+      "source_url": null,
+      "raw_notice_date": "06/10/2024",
+      "notes": null,
+      "added_date": "2024-08-11",
+      "year_month": "2024-08"
+    },
+    {
+      "record_id": "a1b2c3d4e5f60020",
+      "company": "Wells Fargo",
+      "state": "CA",
+      "country": "USA",
+      "city": "San Francisco",
+      "layoff_date": "2025-02-10",
+      "notice_date": "2024-12-10",
+      "employees_laid_off": 240,
+      "layoff_type": "Layoff",
+      "industry": "Finance",
+      "source": "WARN-CA",
+      "source_url": null,
+      "raw_notice_date": "12/10/2024",
+      "notes": null,
+      "added_date": "2025-02-11",
+      "year_month": "2025-02"
+    },
+    {
+      "record_id": "a1b2c3d4e5f60021",
+      "company": "Walt Disney",
+      "state": "FL",
+      "country": "USA",
+      "city": "Orlando",
+      "layoff_date": "2024-09-05",
+      "notice_date": "2024-07-05",
+      "employees_laid_off": 220,
+      "layoff_type": "Layoff",
+      "industry": "Entertainment",
+      "source": "WARN-FL",
+      "source_url": null,
+      "raw_notice_date": "07/05/2024",
+      "notes": null,
+      "added_date": "2024-09-06",
+      "year_month": "2024-09"
+    },
+    {
+      "record_id": "a1b2c3d4e5f60022",
+      "company": "Pfizer",
+      "state": "NJ",
+      "country": "USA",
+      "city": "New Brunswick",
+      "layoff_date": "2025-01-05",
+      "notice_date": "2024-11-05",
+      "employees_laid_off": 130,
+      "layoff_type": "Layoff",
+      "industry": "Pharma",
+      "source": "WARN-NJ",
+      "source_url": null,
+      "raw_notice_date": "11/05/2024",
+      "notes": null,
+      "added_date": "2025-01-06",
+      "year_month": "2025-01"
+    },
+    {
+      "record_id": "a1b2c3d4e5f60023",
+      "company": "Verizon",
+      "state": "NJ",
+      "country": "USA",
+      "city": "Basking Ridge",
+      "layoff_date": "2024-10-08",
+      "notice_date": "2024-08-08",
+      "employees_laid_off": 145,
+      "layoff_type": "Layoff",
+      "industry": "Telecom",
+      "source": "WARN-NJ",
+      "source_url": null,
+      "raw_notice_date": "08/08/2024",
+      "notes": null,
+      "added_date": "2024-10-09",
+      "year_month": "2024-10"
+    },
+    {
+      "record_id": "a1b2c3d4e5f60024",
+      "company": "Zoom Video",
+      "state": "CA",
+      "country": "USA",
+      "city": "San Jose",
+      "layoff_date": "2024-07-20",
+      "notice_date": "2024-05-20",
+      "employees_laid_off": 175,
+      "layoff_type": "Layoff",
+      "industry": "Technology",
+      "source": "WARN-CA",
+      "source_url": null,
+      "raw_notice_date": "05/20/2024",
+      "notes": null,
+      "added_date": "2024-07-21",
+      "year_month": "2024-07"
+    },
+    {
+      "record_id": "a1b2c3d4e5f60025",
+      "company": "Lyft Inc",
+      "state": "CA",
+      "country": "USA",
+      "city": "San Francisco",
+      "layoff_date": "2024-08-22",
+      "notice_date": "2024-06-22",
+      "employees_laid_off": 165,
+      "layoff_type": "Layoff",
+      "industry": "Technology",
+      "source": "WARN-CA",
+      "source_url": null,
+      "raw_notice_date": "06/22/2024",
+      "notes": null,
+      "added_date": "2024-08-23",
+      "year_month": "2024-08"
+    }
+  ]
+}

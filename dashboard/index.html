@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Global Layoff Tracker</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0f1117; --surface: #1a1d27; --border: #2a2d3e;
+      --text: #e2e8f0; --muted: #8892a4; --accent: #6366f1;
+      --red: #ef4444; --green: #22c55e; --yellow: #f59e0b;
+    }
+    body { background: var(--bg); color: var(--text); font-family: system-ui, sans-serif; min-height: 100vh; }
+
+    /* ── Header ── */
+    header {
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 0.9rem 2rem; display: flex; align-items: center; gap: 0.75rem;
+      position: sticky; top: 0; z-index: 100;
+    }
+    header h1 { font-size: 1.1rem; font-weight: 700; }
+    .badge { background: var(--red); color: #fff; font-size: 0.6rem; font-weight: 700; padding: 0.15rem 0.45rem; border-radius: 999px; letter-spacing: 0.06em; }
+    .updated { margin-left: auto; color: var(--muted); font-size: 0.75rem; }
+
+    /* ── Filter bar ── */
+    .filter-bar {
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 0.6rem 2rem; display: flex; align-items: center; gap: 1.5rem;
+      flex-wrap: wrap; position: sticky; top: 49px; z-index: 99;
+    }
+    .filter-group { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+    .filter-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-right: 0.25rem; white-space: nowrap; }
+    .filter-btn {
+      background: transparent; border: 1px solid var(--border); color: var(--muted);
+      font-size: 0.78rem; padding: 0.25rem 0.7rem; border-radius: 6px; cursor: pointer;
+      transition: all .15s; white-space: nowrap;
+    }
+    .filter-btn:hover { border-color: var(--accent); color: var(--text); }
+    .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+    .filter-divider { width: 1px; height: 1.5rem; background: var(--border); flex-shrink: 0; }
+    .filter-status { margin-left: auto; font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
+    .filter-status strong { color: var(--text); }
+    #clear-filter {
+      background: transparent; border: 1px solid var(--border); color: var(--muted);
+      font-size: 0.72rem; padding: 0.2rem 0.6rem; border-radius: 6px; cursor: pointer;
+      transition: all .15s;
+    }
+    #clear-filter:hover { border-color: var(--red); color: var(--red); }
+
+    /* ── Main layout ── */
+    main { max-width: 1400px; margin: 0 auto; padding: 1.5rem 2rem; }
+
+    /* ── Summary cards ── */
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; margin-bottom: 1.25rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.4rem; transition: border-color .2s; }
+    .card:hover { border-color: #3a3d5e; }
+    .card .label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.35rem; }
+    .card .value { font-size: 1.9rem; font-weight: 700; line-height: 1; }
+    .card .sub { font-size: 0.72rem; color: var(--muted); margin-top: 0.3rem; }
+    .card.red .value { color: var(--red); }
+    .card.accent .value { color: var(--accent); }
+    .card.green .value { color: var(--green); }
+    .card.yellow .value { color: var(--yellow); }
+
+    /* ── Charts ── */
+    .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
+    @media (max-width: 860px) { .charts { grid-template-columns: 1fr; } }
+    .chart-box {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 1.25rem;
+    }
+    .chart-box h2 { font-size: 0.75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.9rem; display: flex; align-items: center; gap: 0.5rem; }
+    .chart-hint { font-size: 0.68rem; color: var(--muted); font-weight: 400; margin-left: auto; text-transform: none; letter-spacing: 0; opacity: .7; }
+    .chart-box canvas { max-height: 260px; }
+    .timeline-box { grid-column: 1 / -1; }
+
+    /* ── Tables ── */
+    .tables { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 860px) { .tables { grid-template-columns: 1fr; } }
+    .table-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; overflow: hidden; }
+    .table-box h2 { font-size: 0.75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.9rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    thead th { text-align: left; color: var(--muted); font-weight: 500; padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--border); font-size: 0.7rem; }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(99,102,241,.05); }
+    tbody td { padding: 0.45rem 0.5rem; vertical-align: middle; }
+    .num { text-align: right; font-variant-numeric: tabular-nums; }
+    .pill { display: inline-block; padding: 0.1rem 0.45rem; border-radius: 999px; font-size: 0.68rem; font-weight: 600; }
+    .pill-red    { background: rgba(239,68,68,.15);  color: var(--red); }
+    .pill-yellow { background: rgba(245,158,11,.15); color: var(--yellow); }
+    .pill-blue   { background: rgba(99,102,241,.15); color: var(--accent); }
+    .pill-green  { background: rgba(34,197,94,.15);  color: var(--green); }
+    .bar-inline  { display: flex; align-items: center; gap: 0.5rem; }
+    .bar-bg  { flex: 1; height: 5px; background: var(--border); border-radius: 3px; min-width: 40px; }
+    .bar-fill{ height: 5px; border-radius: 3px; background: var(--accent); }
+    .empty { color: var(--muted); text-align: center; padding: 2rem; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+
+<header>
+  <span style="font-size:1.4rem">📉</span>
+  <h1>Global Layoff Tracker</h1>
+  <span class="badge">LIVE</span>
+  <span class="updated" id="updated-at">—</span>
+</header>
+
+<!-- ── Filter bar ─────────────────────────────────────────────────────────── -->
+<div class="filter-bar">
+  <div class="filter-group">
+    <span class="filter-label">Year</span>
+    <div id="year-btns" style="display:flex;gap:.35rem;flex-wrap:wrap;"></div>
+  </div>
+  <div class="filter-divider" id="month-divider" style="display:none"></div>
+  <div class="filter-group" id="month-group" style="display:none">
+    <span class="filter-label">Month</span>
+    <div id="month-btns" style="display:flex;gap:.35rem;flex-wrap:wrap;"></div>
+  </div>
+  <button id="clear-filter" style="display:none">✕ Clear filter</button>
+  <span class="filter-status" id="filter-status"></span>
+</div>
+
+<main>
+  <!-- Summary cards -->
+  <div class="cards">
+    <div class="card red">
+      <div class="label">Total Laid Off</div>
+      <div class="value" id="total-laid-off">—</div>
+      <div class="sub" id="sub-laid-off">from WARN filings</div>
+    </div>
+    <div class="card accent">
+      <div class="label">Total Records</div>
+      <div class="value" id="total-records">—</div>
+      <div class="sub">WARN Act notices</div>
+    </div>
+    <div class="card green">
+      <div class="label">States Covered</div>
+      <div class="value" id="states-covered">—</div>
+      <div class="sub">of 50 US states</div>
+    </div>
+    <div class="card yellow">
+      <div class="label">Companies</div>
+      <div class="value" id="companies">—</div>
+      <div class="sub">unique employers</div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="charts">
+    <div class="chart-box">
+      <h2>Layoffs by State (top 10)</h2>
+      <canvas id="stateChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <h2>Layoff Type</h2>
+      <canvas id="typeChart"></canvas>
+    </div>
+    <div class="chart-box timeline-box">
+      <h2>
+        Monthly Timeline
+        <span class="chart-hint">Click a bar to zoom into that month</span>
+      </h2>
+      <canvas id="timelineChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Tables -->
+  <div class="tables">
+    <div class="table-box">
+      <h2>Top Companies</h2>
+      <table>
+        <thead><tr><th>#</th><th>Company</th><th class="num">Laid Off</th></tr></thead>
+        <tbody id="top-companies-body"><tr><td colspan="3" class="empty">Loading…</td></tr></tbody>
+      </table>
+    </div>
+    <div class="table-box">
+      <h2 id="recent-title">Recent Filings</h2>
+      <table>
+        <thead><tr><th>Company</th><th>State</th><th>Date</th><th class="num">Count</th></tr></thead>
+        <tbody id="recent-body"><tr><td colspan="4" class="empty">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<script>
+// ── Helpers ───────────────────────────────────────────────────────────────────
+const fmt = n => n >= 1e6 ? (n/1e6).toFixed(1)+'M' : n >= 1e3 ? (n/1e3).toFixed(1)+'K' : String(n);
+const fmtFull = n => Number(n).toLocaleString();
+const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const monthLabel = ym => { const [y,m] = ym.split('-'); return MONTH_NAMES[+m-1]+' '+y; };
+
+Chart.defaults.color = '#8892a4';
+Chart.defaults.borderColor = '#2a2d3e';
+Chart.defaults.font.family = 'system-ui, sans-serif';
+
+// ── App state ─────────────────────────────────────────────────────────────────
+let ALL_RECORDS = [];
+let FILTER = { year: null, month: null };
+let CHARTS = {};
+
+// ── Data loading ──────────────────────────────────────────────────────────────
+async function loadData() {
+  try {
+    const res = await fetch('data.json');
+    if (!res.ok) throw new Error();
+    return await res.json();
+  } catch {
+    return SAMPLE_DATA;
+  }
+}
+
+// ── Filtering ─────────────────────────────────────────────────────────────────
+function filtered() {
+  return ALL_RECORDS.filter(r => {
+    if (!r.layoff_date) return !FILTER.year;
+    const y = r.layoff_date.slice(0,4);
+    const m = r.layoff_date.slice(5,7);
+    if (FILTER.year  && y !== FILTER.year)  return false;
+    if (FILTER.month && m !== FILTER.month) return false;
+    return true;
+  });
+}
+
+// ── Aggregation ───────────────────────────────────────────────────────────────
+function aggregate(records) {
+  const byState = {}, byType = {}, byCompany = {}, byMonth = {};
+  let totalLaid = 0;
+  const states = new Set(), companies = new Set();
+
+  for (const r of records) {
+    const n   = +r.employees_laid_off > 0 ? +r.employees_laid_off : 0;
+    const st  = r.state      || '??';
+    const ty  = r.layoff_type|| 'Layoff';
+    const co  = r.company    || 'Unknown';
+    const ym  = r.layoff_date ? r.layoff_date.slice(0,7) : null;
+
+    states.add(st); companies.add(co); totalLaid += n;
+    if (n > 0) {
+      byState[st]   = (byState[st]   || 0) + n;
+      byCompany[co] = (byCompany[co] || 0) + n;
+    }
+    byType[ty] = (byType[ty] || 0) + 1;
+    if (ym && n > 0) byMonth[ym] = (byMonth[ym] || 0) + n;
+  }
+
+  return {
+    summary: {
+      total_records: records.length,
+      total_employees_laid_off: totalLaid,
+      states_covered: states.size,
+      companies_tracked: companies.size,
+    },
+    by_state:      Object.entries(byState).sort((a,b)=>b[1]-a[1]).slice(0,10),
+    by_type:       Object.entries(byType),
+    top_companies: Object.entries(byCompany).sort((a,b)=>b[1]-a[1]).slice(0,15).map(([c,t])=>({company:c,total:t})),
+    timeline:      Object.entries(byMonth).sort((a,b)=>a[0].localeCompare(b[0])).map(([m,e])=>({month:m,employees:e})),
+  };
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
+function renderAll() {
+  const recs = filtered();
+  const agg  = aggregate(recs);
+  renderCards(agg.summary);
+  updateStateChart(agg.by_state);
+  updateTypeChart(agg.by_type);
+  updateTimeline(agg.timeline);
+  renderTopCompanies(agg.top_companies);
+  renderRecent(recs);
+  updateFilterUI();
+}
+
+function renderCards(s) {
+  document.getElementById('total-laid-off').textContent = fmt(s.total_employees_laid_off);
+  document.getElementById('total-records').textContent  = fmtFull(s.total_records);
+  document.getElementById('states-covered').textContent = s.states_covered;
+  document.getElementById('companies').textContent      = fmtFull(s.companies_tracked);
+
+  let sub = 'from WARN filings';
+  if (FILTER.year && FILTER.month) sub = `in ${MONTH_NAMES[+FILTER.month-1]} ${FILTER.year}`;
+  else if (FILTER.year)            sub = `in ${FILTER.year}`;
+  document.getElementById('sub-laid-off').textContent = sub;
+}
+
+// ── Charts (create once, update data after) ───────────────────────────────────
+function initCharts() {
+  CHARTS.state = new Chart(document.getElementById('stateChart'), {
+    type: 'bar',
+    data: { labels: [], datasets: [{ data: [], backgroundColor: '#6366f1', borderRadius: 4, hoverBackgroundColor: '#818cf8' }] },
+    options: {
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + fmtFull(ctx.raw) + ' employees' } } },
+      scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => fmt(v) } } },
+      onClick(e, els) {
+        if (!els.length) return;
+        // highlight on click — future: filter by state
+      },
+    },
+  });
+
+  CHARTS.type = new Chart(document.getElementById('typeChart'), {
+    type: 'doughnut',
+    data: {
+      labels: [],
+      datasets: [{ data: [], backgroundColor: ['#6366f1','#f59e0b','#22c55e','#ef4444','#06b6d4'], borderWidth: 2, hoverOffset: 6 }],
+    },
+    options: {
+      plugins: { legend: { position: 'right', labels: { boxWidth: 12, padding: 14 } } },
+      cutout: '62%',
+    },
+  });
+
+  CHARTS.timeline = new Chart(document.getElementById('timelineChart'), {
+    type: 'bar',
+    data: { labels: [], datasets: [{ data: [], backgroundColor: [], borderRadius: 4, hoverBackgroundColor: '#818cf8' }] },
+    options: {
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: {
+          title: ctx => monthLabel(ctx[0].label),
+          label: ctx => ' ' + fmtFull(ctx.raw) + ' employees',
+        }},
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { maxRotation: 45 } },
+        y: { ticks: { callback: v => fmt(v) } },
+      },
+      onClick(e, els) {
+        if (!els.length) return;
+        const ym = CHARTS.timeline.data.labels[els[0].index]; // "2024-10"
+        const [y, m] = ym.split('-');
+        // Toggle: click same month again → clear month (keep year)
+        if (FILTER.year === y && FILTER.month === m) {
+          FILTER.month = null;
+        } else {
+          FILTER.year  = y;
+          FILTER.month = m;
+        }
+        renderAll();
+      },
+    },
+  });
+}
+
+function updateStateChart(entries) {
+  CHARTS.state.data.labels = entries.map(e=>e[0]);
+  CHARTS.state.data.datasets[0].data = entries.map(e=>e[1]);
+  CHARTS.state.update('active');
+}
+
+function updateTypeChart(entries) {
+  CHARTS.type.data.labels = entries.map(e=>e[0]);
+  CHARTS.type.data.datasets[0].data = entries.map(e=>e[1]);
+  CHARTS.type.update('active');
+}
+
+function updateTimeline(timeline) {
+  CHARTS.timeline.data.labels = timeline.map(t=>t.month);
+  CHARTS.timeline.data.datasets[0].data   = timeline.map(t=>t.employees);
+  CHARTS.timeline.data.datasets[0].backgroundColor = timeline.map(t => {
+    const [y, m] = t.month.split('-');
+    return (FILTER.year === y && FILTER.month === m) ? '#f59e0b' : '#6366f1';
+  });
+  CHARTS.timeline.update('active');
+}
+
+function renderTopCompanies(companies) {
+  const tbody = document.getElementById('top-companies-body');
+  if (!companies.length) { tbody.innerHTML = '<tr><td colspan="3" class="empty">No data</td></tr>'; return; }
+  const max = companies[0].total;
+  tbody.innerHTML = companies.map((c, i) => `
+    <tr>
+      <td style="color:var(--muted);width:1.8rem;font-size:.75rem">${i+1}</td>
+      <td>
+        <div class="bar-inline">
+          <span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.company}</span>
+          <span class="bar-bg"><span class="bar-fill" style="width:${Math.round(c.total/max*100)}%"></span></span>
+        </div>
+      </td>
+      <td class="num" style="font-size:.8rem">${fmtFull(c.total)}</td>
+    </tr>`).join('');
+}
+
+function renderRecent(records) {
+  const tbody = document.getElementById('recent-body');
+  const title = document.getElementById('recent-title');
+
+  let label = 'Recent Filings';
+  if (FILTER.year && FILTER.month) label = `Filings — ${MONTH_NAMES[+FILTER.month-1]} ${FILTER.year}`;
+  else if (FILTER.year)            label = `Filings — ${FILTER.year}`;
+  title.textContent = label;
+
+  if (!records.length) { tbody.innerHTML = '<tr><td colspan="4" class="empty">No records match this filter</td></tr>'; return; }
+
+  const sorted = [...records]
+    .filter(r => r.layoff_date)
+    .sort((a,b) => b.layoff_date.localeCompare(a.layoff_date))
+    .slice(0, 25);
+
+  const typeClass = t => t==='Closure' ? 'pill-red' : t==='Relocation' ? 'pill-yellow' : 'pill-green';
+  tbody.innerHTML = sorted.map(r => `
+    <tr>
+      <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${r.company}">${r.company}</td>
+      <td><span class="pill pill-blue">${r.state||'—'}</span></td>
+      <td style="color:var(--muted);font-size:.75rem;white-space:nowrap">${r.layoff_date||'—'}</td>
+      <td class="num" style="font-size:.8rem">${+r.employees_laid_off > 0 ? fmtFull(r.employees_laid_off) : '—'}</td>
+    </tr>`).join('');
+}
+
+// ── Filter UI ─────────────────────────────────────────────────────────────────
+function updateFilterUI() {
+  const years = [...new Set(ALL_RECORDS.map(r => r.layoff_date?.slice(0,4)).filter(Boolean))].sort();
+
+  // Year buttons
+  const yearBtns = document.getElementById('year-btns');
+  yearBtns.innerHTML = '';
+  appendBtn(yearBtns, 'All time', !FILTER.year, () => { FILTER.year = null; FILTER.month = null; renderAll(); });
+  for (const y of years) {
+    appendBtn(yearBtns, y, FILTER.year === y, () => {
+      FILTER.year  = FILTER.year === y ? null : y;
+      FILTER.month = null;
+      renderAll();
+    });
+  }
+
+  // Month buttons — only when a year is selected
+  const monthGroup   = document.getElementById('month-group');
+  const monthDivider = document.getElementById('month-divider');
+  const monthBtns    = document.getElementById('month-btns');
+
+  if (FILTER.year) {
+    const months = [...new Set(
+      ALL_RECORDS
+        .filter(r => r.layoff_date?.startsWith(FILTER.year))
+        .map(r => r.layoff_date?.slice(5,7))
+        .filter(Boolean)
+    )].sort();
+
+    monthBtns.innerHTML = '';
+    for (const m of months) {
+      appendBtn(monthBtns, MONTH_NAMES[+m-1], FILTER.month === m, () => {
+        FILTER.month = FILTER.month === m ? null : m;
+        renderAll();
+      });
+    }
+    monthGroup.style.display   = 'flex';
+    monthDivider.style.display = 'block';
+  } else {
+    monthGroup.style.display   = 'none';
+    monthDivider.style.display = 'none';
+  }
+
+  // Clear button + status
+  const hasFilter = FILTER.year || FILTER.month;
+  document.getElementById('clear-filter').style.display = hasFilter ? 'block' : 'none';
+
+  const total    = ALL_RECORDS.length;
+  const showing  = filtered().length;
+  const statusEl = document.getElementById('filter-status');
+  if (hasFilter) {
+    statusEl.innerHTML = `Showing <strong>${fmtFull(showing)}</strong> of ${fmtFull(total)} records`;
+  } else {
+    statusEl.innerHTML = `<strong>${fmtFull(total)}</strong> records total`;
+  }
+}
+
+function appendBtn(container, label, active, onClick) {
+  const btn = document.createElement('button');
+  btn.className = 'filter-btn' + (active ? ' active' : '');
+  btn.textContent = label;
+  btn.addEventListener('click', onClick);
+  container.appendChild(btn);
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+loadData().then(d => {
+  // Set updated-at
+  if (d.generated_at) {
+    const dt = new Date(d.generated_at);
+    document.getElementById('updated-at').textContent = 'Updated ' + dt.toLocaleString();
+  }
+
+  // Use records array; fall back to reconstructing from pre-aggregated data
+  ALL_RECORDS = (d.records && d.records.length)
+    ? d.records
+    : SAMPLE_DATA.records;
+
+  // Clear-filter click
+  document.getElementById('clear-filter').addEventListener('click', () => {
+    FILTER.year = null; FILTER.month = null; renderAll();
+  });
+
+  initCharts();
+  renderAll();
+});
+
+// ── Sample / fallback data ────────────────────────────────────────────────────
+const SAMPLE_DATA = {
+  generated_at: new Date().toISOString(),
+  records: [
+    // 2023
+    {company:'Twitter / X',         state:'CA', layoff_date:'2023-11-01', employees_laid_off:3700, layoff_type:'Layoff'},
+    {company:'Amazon',              state:'WA', layoff_date:'2023-01-18', employees_laid_off:2800, layoff_type:'Layoff'},
+    {company:'Salesforce',          state:'CA', layoff_date:'2023-01-26', employees_laid_off:2100, layoff_type:'Layoff'},
+    {company:'Microsoft',           state:'WA', layoff_date:'2023-01-18', employees_laid_off:1900, layoff_type:'Layoff'},
+    {company:'Google LLC',          state:'CA', layoff_date:'2023-01-20', employees_laid_off:1800, layoff_type:'Layoff'},
+    // 2024
+    {company:'Boeing',              state:'WA', layoff_date:'2025-01-15', employees_laid_off:2200, layoff_type:'Layoff'},
+    {company:'Intel Corporation',   state:'OR', layoff_date:'2025-01-08', employees_laid_off:1800, layoff_type:'Layoff'},
+    {company:'Microsoft Corporation',state:'WA',layoff_date:'2024-11-20', employees_laid_off:1500, layoff_type:'Layoff'},
+    {company:'Meta Platforms',      state:'CA', layoff_date:'2024-10-14', employees_laid_off:1200, layoff_type:'Layoff'},
+    {company:'Ford Motor Company',  state:'MI', layoff_date:'2024-09-30', employees_laid_off:900,  layoff_type:'Layoff'},
+    {company:'Amazon.com Inc',      state:'WA', layoff_date:'2025-02-01', employees_laid_off:800,  layoff_type:'Layoff'},
+    {company:'Cisco Systems',       state:'CA', layoff_date:'2024-12-05', employees_laid_off:750,  layoff_type:'Layoff'},
+    {company:'Nike Inc',            state:'OR', layoff_date:'2024-11-01', employees_laid_off:700,  layoff_type:'Closure'},
+    {company:'Citigroup',           state:'NY', layoff_date:'2025-01-22', employees_laid_off:650,  layoff_type:'Layoff'},
+    {company:'General Motors',      state:'MI', layoff_date:'2024-10-15', employees_laid_off:580,  layoff_type:'Layoff'},
+    {company:'Dell Technologies',   state:'TX', layoff_date:'2024-09-20', employees_laid_off:520,  layoff_type:'Layoff'},
+    {company:'HP Inc',              state:'CA', layoff_date:'2024-11-12', employees_laid_off:480,  layoff_type:'Layoff'},
+    {company:'Stellantis',          state:'MI', layoff_date:'2025-01-10', employees_laid_off:450,  layoff_type:'Layoff'},
+    {company:'Salesforce',          state:'CA', layoff_date:'2024-08-28', employees_laid_off:420,  layoff_type:'Layoff'},
+    {company:'Google LLC',          state:'CA', layoff_date:'2024-07-15', employees_laid_off:400,  layoff_type:'Layoff'},
+    {company:'Bank of America',     state:'NC', layoff_date:'2024-12-01', employees_laid_off:360,  layoff_type:'Layoff'},
+    {company:'AT&T',                state:'TX', layoff_date:'2024-11-05', employees_laid_off:340,  layoff_type:'Layoff'},
+    {company:'United Airlines',     state:'IL', layoff_date:'2024-10-20', employees_laid_off:280,  layoff_type:'Layoff'},
+    {company:'Comcast',             state:'PA', layoff_date:'2024-08-10', employees_laid_off:260,  layoff_type:'Layoff'},
+    {company:'Wells Fargo',         state:'CA', layoff_date:'2025-02-10', employees_laid_off:240,  layoff_type:'Layoff'},
+    {company:'Walt Disney',         state:'FL', layoff_date:'2024-09-05', employees_laid_off:220,  layoff_type:'Layoff'},
+    {company:'Pfizer',              state:'NJ', layoff_date:'2025-01-05', employees_laid_off:130,  layoff_type:'Layoff'},
+    {company:'Verizon',             state:'NJ', layoff_date:'2024-10-08', employees_laid_off:145,  layoff_type:'Layoff'},
+    {company:'Zoom Video',          state:'CA', layoff_date:'2024-07-20', employees_laid_off:175,  layoff_type:'Layoff'},
+    {company:'Lyft Inc',            state:'CA', layoff_date:'2024-08-22', employees_laid_off:165,  layoff_type:'Layoff'},
+  ],
+};
+</script>
+</body>
+</html>

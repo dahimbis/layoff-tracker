@@ -19,12 +19,14 @@ Run:
 """
 
 import argparse
+import concurrent.futures
 import csv
 import hashlib
 import json
 import logging
 import sys
 import tempfile
+import time as _time
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -126,13 +128,13 @@ STATE_PORTAL_URLS = {
 }
 
 
-def run_warn_scraper(states: list[str], output_dir: Path) -> dict[str, Path]:
+def run_warn_scraper(states: list[str], output_dir: Path, max_minutes: int = 0) -> dict[str, Path]:
     """
     Run warn-scraper using its Python Runner API to download WARN data.
     Returns a dict of {state_code: csv_path}.
-    
-    warn-scraper docs: https://warn-scraper.readthedocs.io/
-    GitHub: https://github.com/biglocalnews/warn-scraper
+
+    max_minutes: stop after N minutes total (0 = unlimited).
+                 Each state gets at most 2 minutes regardless.
     """
     try:
         from warn.runner import Runner
@@ -144,17 +146,36 @@ def run_warn_scraper(states: list[str], output_dir: Path) -> dict[str, Path]:
     cache_dir.mkdir(exist_ok=True)
     runner = Runner(data_dir=output_dir, cache_dir=cache_dir)
 
+    deadline = (_time.monotonic() + max_minutes * 60) if max_minutes else None
+    PER_STATE_TIMEOUT = 120  # 2 min max per state regardless of total budget
+
     results = {}
     for state in states:
+        # Check overall time budget
+        if deadline and _time.monotonic() >= deadline:
+            log.warning(f"  ⏱ Time budget ({max_minutes}m) reached — stopping before {state}")
+            break
+
+        remaining = (deadline - _time.monotonic()) if deadline else PER_STATE_TIMEOUT
+        timeout = min(PER_STATE_TIMEOUT, remaining)
+        if timeout <= 0:
+            break
+
         log.info(f"  Scraping {state}...")
         try:
-            csv_path = runner.scrape(state.lower())
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as ex:
+                future = ex.submit(runner.scrape, state.lower())
+                try:
+                    csv_path = future.result(timeout=timeout)
+                except concurrent.futures.TimeoutError:
+                    log.warning(f"    ⚠ {state}: timed out after {timeout:.0f}s, skipping")
+                    continue
+
             if csv_path and Path(csv_path).exists():
                 results[state] = Path(csv_path)
-                row_count = sum(1 for _ in open(csv_path)) - 1  # subtract header
+                row_count = sum(1 for _ in open(csv_path)) - 1
                 log.info(f"    ✓ {state}: {row_count} rows → {csv_path}")
             else:
-                # Fallback: look for any file matching the state code
                 candidates = list(output_dir.glob(f"{state.lower()}*.csv"))
                 if candidates:
                     results[state] = candidates[0]
@@ -163,7 +184,6 @@ def run_warn_scraper(states: list[str], output_dir: Path) -> dict[str, Path]:
                     log.warning(f"    ⚠ {state}: no output file found")
         except Exception as e:
             log.warning(f"    ⚠ {state}: {type(e).__name__} — {str(e)[:120]}")
-            # Continue — don't let one state failure stop the whole run
     return results
 
 
@@ -318,6 +338,7 @@ def generate_stats() -> dict:
 
     df = pd.read_csv(USA_CSV, dtype=str)
     df["employees_laid_off"] = pd.to_numeric(df["employees_laid_off"], errors="coerce").fillna(-1).astype(int)
+    df["year_month"] = df["layoff_date"].str[:7]
 
     valid = df[df["employees_laid_off"] > 0]
     total = int(valid["employees_laid_off"].sum())
@@ -326,7 +347,6 @@ def generate_stats() -> dict:
     by_type = df.groupby("layoff_type").size().to_dict()
 
     # Timeline
-    df["year_month"] = df["layoff_date"].str[:7]
     timeline_raw = valid.groupby("year_month")["employees_laid_off"].sum()
     timeline = [{"month": k, "employees": int(v)} for k, v in sorted(timeline_raw.items()) if k and k != "nan"]
 
@@ -371,6 +391,9 @@ def main():
                         help="Pass 'all' to warn-scraper (scrapes all supported states)")
     parser.add_argument("--skip-scrape", action="store_true",
                         help="Skip scraping, just re-normalize existing cache")
+    parser.add_argument("--max-minutes", type=int, default=0, metavar="N",
+                        help="Stop scraping after N minutes (0 = unlimited). Each state "
+                             "also has a hard 2-minute cap. Example: --max-minutes 10")
     args = parser.parse_args()
 
     states = ["all"] if args.all_states else [s.upper() for s in args.states]
@@ -380,6 +403,8 @@ def main():
     log.info("=" * 60)
     log.info(f"  States: {states}")
     log.info(f"  Output: {USA_CSV}")
+    if args.max_minutes:
+        log.info(f"  Time limit: {args.max_minutes} minutes (2 min cap per state)")
 
     with tempfile.TemporaryDirectory() as tmpdir:
         tmp = Path(tmpdir)
@@ -387,9 +412,9 @@ def main():
         # Step 1: Download
         if not args.skip_scrape:
             if states == ["all"]:
-                scraped = run_warn_scraper(HIGH_PRIORITY_STATES, tmp)
+                scraped = run_warn_scraper(HIGH_PRIORITY_STATES, tmp, args.max_minutes)
             else:
-                scraped = run_warn_scraper(states, tmp)
+                scraped = run_warn_scraper(states, tmp, args.max_minutes)
         else:
             scraped = {s: tmp / f"{s.lower()}.csv" for s in states if (tmp / f"{s.lower()}.csv").exists()}
             log.info(f"  Skipping scrape, using cached files: {list(scraped.keys())}")

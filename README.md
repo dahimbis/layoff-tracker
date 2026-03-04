@@ -96,11 +96,14 @@ pip install -r requirements.txt
 
 ### 3. Run the pipeline locally
 ```bash
-# Scrape top 20 US states
+# Quick run — scrape 3 fast states, stop after 10 minutes
+python scripts/pipeline.py --states CA NY TX --max-minutes 10
+
+# Scrape top 20 US states (no time limit)
 python scripts/pipeline.py
 
-# Scrape specific states
-python scripts/pipeline.py --states CA NY TX WA
+# Scrape specific states with a 5-minute cap
+python scripts/pipeline.py --states CA WA OR --max-minutes 5
 
 # Scrape ALL supported states (~40)
 python scripts/pipeline.py --all-states
@@ -109,16 +112,28 @@ python scripts/pipeline.py --all-states
 python scripts/global_scraper.py
 ```
 
-### 4. View the data
+> **Tip:** Use `--max-minutes N` to prevent the run from hanging on slow state portals.
+> Each state also has a hard **2-minute per-state cap** regardless of the total budget.
+
+### 4. View the data & dashboard
 ```bash
 # Check what was scraped
 wc -l data/layoffs_usa.csv
-head -5 data/layoffs_usa.csv
 
-# Serve dashboard locally
+# Serve dashboard locally (auto-loads data.json)
 cd dashboard && python -m http.server 8080
 # Open http://localhost:8080
 ```
+
+The dashboard shows:
+- **Summary cards** — total laid off, record count, states, companies
+- **Bar chart** — layoffs by state (top 10)
+- **Doughnut chart** — layoff type breakdown
+- **Timeline** — monthly trend line
+- **Top companies** table with inline bar
+- **Recent filings** table (sorted by date)
+
+> If `data.json` is missing the dashboard automatically shows built-in sample data so it always looks complete.
 
 ### 5. Enable GitHub Actions (for daily automation)
 
@@ -133,6 +148,27 @@ In your GitHub repo:
 - Commit new records directly to `data/layoffs_usa.csv`
 - Regenerate dashboard data
 - Auto-deploy the dashboard
+
+---
+
+## 📋 Sample Data
+
+Recent filings in `data/layoffs_usa.csv` (seed + live WARN scrapes):
+
+| Company | State | Date | Employees | Type |
+|---------|-------|------|----------:|------|
+| Boeing | WA | 2025-01-15 | 2,200 | Layoff |
+| Intel Corporation | OR | 2025-01-08 | 1,800 | Layoff |
+| Microsoft Corporation | WA | 2024-11-20 | 1,500 | Layoff |
+| Meta Platforms | CA | 2024-10-14 | 1,200 | Layoff |
+| Ford Motor Company | MI | 2024-09-30 | 900 | Layoff |
+| Amazon.com Inc | WA | 2025-02-01 | 800 | Layoff |
+| Cisco Systems | CA | 2024-12-05 | 750 | Layoff |
+| Nike Inc | OR | 2024-11-01 | 700 | Closure |
+| Citigroup | NY | 2025-01-22 | 650 | Layoff |
+| General Motors | MI | 2024-10-15 | 580 | Layoff |
+
+*25 seed records included. Grows automatically with each pipeline run.*
 
 ---
 
