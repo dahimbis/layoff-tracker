@@ -1,5 +1,7 @@
 # 🌍 Global Layoff Tracker
 
+In this era of AI, company layoffs are happening each and every day. The goal is to track the layoffs and understand the main industries affected.
+
 > Real-time layoff data pulled automatically from **US government WARN Act filings** + **international news sources**. 
 > No fake data. No manual entry. Everything is scraped from primary sources daily.
 
