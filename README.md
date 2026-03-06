@@ -20,7 +20,7 @@ In this era of AI, company layoffs are happening each and every day. The goal is
 ### 🇺🇸 USA - WARN Act (Automated, Government-Verified)
 
 The federal **Worker Adjustment and Retraining Notification (WARN) Act** legally requires
-companies with 100+ employees to file 60-day advance notice before mass layoffs.
+Companies with 100+ employees must file a 60-day advance notice before mass layoffs.
 Every US state publishes this data publicly.
 
 This repo uses **[`warn-scraper`](https://github.com/biglocalnews/warn-scraper)**, 
