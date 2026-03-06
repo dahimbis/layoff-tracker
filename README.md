@@ -193,7 +193,7 @@ Recent filings in `data/layoffs_usa.csv` (seed + live WARN scrapes):
 ## 🤝 Contributing
 
 ### Add international layoffs
-Review `data/pending_global.csv` - these are auto-scraped but need human verification of:
+Review `data/pending_global.csv` - these are auto-scraped but need manual verification of:
 - `country` - fill in the actual country
 - `company` -  verify the extracted name is correct
 - `employees_laid_off` - verify the number
