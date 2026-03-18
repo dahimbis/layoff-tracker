@@ -1,0 +1,57 @@
+name: Deploy Dashboard
+
+on:
+  # Trigger after every successful daily scrape run.
+  # workflow_run fires based on workflow completion — it is NOT affected by
+  # GITHUB_TOKEN push restrictions or [skip ci] commit messages.
+  workflow_run:
+    workflows: ["Daily WARN Act Scrape"]
+    types: [completed]
+
+  # Keep manual trigger for ad-hoc redeployments.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+
+    # Only deploy when the scrape actually succeeded (not on failure/cancel).
+    # Always run on manual workflow_dispatch.
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Explicitly fetch the HEAD of main so we always deploy the data
+          # that was just committed by the scrape job, not the SHA at workflow
+          # start (which pre-dates the bot commit).
+          ref: main
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dashboard/
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
