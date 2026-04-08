@@ -17,7 +17,8 @@ In this era of AI, company layoffs occur every day. The goal is to track layoffs
 
 ## 📡 Where the Data Comes From
 
-### 🇺🇸 USA - WARN Act (Automated, Government-Verified)
+### USA - WARN Act (Automated, Government-Verified)
+A lot of layoffs are happening in the USA -  the goal is to develop this into a standard dataset that tracks current layoffs in usa and rest of the world.
 
 The federal **Worker Adjustment and Retraining Notification (WARN) Act** legally requires
 Companies with 100+ employees must file a 60-day advance notice before mass layoffs.
